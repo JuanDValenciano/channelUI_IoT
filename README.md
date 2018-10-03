@@ -130,6 +130,7 @@ iface wlan1 inet dhcp
 * Go to /init folder and edit the ini_system.py file
 * In a terminal you should run `python ini_system.py`
 * `sudo cp {YOUR ROOT}/channelUI_IoT/channel /etc/init.d/`
+* `cd /etc/init.d/`
 * `sudo chmod +x channel`
 * `sudo update-rc.d sample.py defaults`
 * `sudo reboot`
