@@ -1,22 +1,22 @@
 # channelUI_IoT
 A repository for a water-meter at University of Ibague using IoT
 
-This repository contents: 
+This repository contents:
 - source codes.
-- dev scripts(Python | ROS)
+- dev scripts(Python|ROS)
 
 ## Hardware elements
 - Raspberry PI B +
-- Strato PI UPS
-- Hokuyo UST-10LX Scanning Laser Rangefinder 
-- MaxBotics sonar 
+- Strato PI UPS  "https://www.sferalabs.cc/strato-pi/" Version UPS
+- Hokuyo UST-10LX Scanning Laser Rangefinder "https://www.hokuyo-aut.jp/search/single.php?serial=167"
+- MaxBotics sonar "https://www.maxbotix.com/Ultrasonic_Sensors/MB7360.htm"
 - WiFi dongle
 
 ## Software requirements
 - Raspbian
 - Python 2.7.15,
 *numpy, scipy, rospy
-- Matlab 2017 R1
+- Matlab 2017 R1 "only for the development"
 - ROS kinetic 1.12.13
 
 ## Installing the Strato Pi utility on Raspbian
@@ -47,8 +47,8 @@ If the script completes with no errors, delete the installation script and reboo
 
 Testing the Real Time Clock:
  `date`
- `sudo hwclock -r`
- `sudo hwclock -w`
+ `sudo hwclock -r`  Read Date
+ `sudo hwclock -w`  Write Date
 
 Edit /boot/config.txt and add these lines at the end of the file:
  `# Disable Bluetooth`
@@ -65,18 +65,21 @@ Disable the ttyAMA0 console service:
 Edit the /boot/cmdline.txt file and delete the serial console configuration:
 `console=serial0,115200`
 
+for more information use the strato references.
+*https://www.sferalabs.cc/files/strato/doc/stratopi-ups-user-guide.pdf
 
 ## ROS Installing.
 For ROS install you must follow the next steps:
-* http://wiki.ros.org/ROSberryPi/Setting%20up%20ROS%20on%20RaspberryPi
 
-or follow the video:
-
-* https://www.youtube.com/watch?v=36O6OGOJG1E
+*http://wiki.ros.org/ROSberryPi/Installing%20ROS%20Kinetic%20on%20the%20Raspberry%20Pi
 
 Install de Hokuyo node for ROS
-`sudo apt-get update`
-`sudo apt-get install ros-kinetic-urg-node`
+
+*`rosinstall_generator urg_node robot_upstart --rosdistro kinetic --deps --wet-only --tar > kinetic-custom_ros.rosinstall`
+
+*` wstool merge -t src kinetic-custom_ros.rosinstall`
+*` wstool update -t src`
+*` sudo ./src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/kinetic`
 
 ## Repository Folders
 
@@ -88,8 +91,8 @@ Install de Hokuyo node for ROS
 |--register     / scripts for recording data and log files
 |--sonar        / scripts for sonar sensor
 monitor.py      / system monitoring script
-channel         / main script 
-``` 
+channel         / main script
+```
 
 ## Use Folders.
 In the folder `ROS` , the contents of catkin_ws/src must be copied to your own catkin workspace.
@@ -118,7 +121,7 @@ auto wlan0
 allow-hotplug wlan0
 iface wlan0 inet dhcp
     wpa-conf /etc/wpa_supplicant/wpa_supplicant_0.conf
-    
+
 auto wlan1
 allow-hotplug wlan1
 iface wlan1 inet dhcp
@@ -126,16 +129,32 @@ iface wlan1 inet dhcp
 ```
 * config a static ip address on /etc/dhcpcd.conf file
 
-### Ini system
-* Go to /init folder and edit the ini_system.py file
-* In a terminal you should run `python ini_system.py`
-* `sudo cp {YOUR ROOT}/channelUI_IoT/channel /etc/init.d/`
-* `cd /etc/init.d/`
-* `sudo chmod +x channel`
-* `sudo update-rc.d sample.py defaults`
-* `sudo reboot`
+### Init upstart RosCore and Nodes
+
+Inside the `rc.local` you need to add path of channel.sh:
+
+```
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+/home/pi/......../channel.sh
+
+exit 0
+
+```
+
 
 ## Autors
 
 * Harold F. Murcia  -  (www.haroldmurcia.com)
-* Juan D. Valenciano - (juan-da3@hotmail.com)
+* Juan D. Valenciano - (jvalenciano@unal.edu.co)
