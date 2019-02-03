@@ -6,7 +6,8 @@ import json
 import requests
 
 config = ConfigParser.RawConfigParser()
-config.read('/home/pi/channelUI_IoT/init/init.cfg')
+#config.read('/home/pi/channelUI_IoT/init/init.cfg')
+config.read('/home/juand/Documents/GitHub/channelUI_IoT/init/init.cfg')  # Path Pc-Home
 
 #API_ENDPOINT = "http://hidrometrico.herokuapp.com/register"
 API_ENDPOINT = "http://smh.unibague.edu.co/register"
@@ -28,6 +29,7 @@ class station(object):
 		self.last_state = -1
                 self.last_std_intensity = -1
 		self.Ts_rec = 60*5
+		#self.Ts_rec = 1
 		self.tic = time.time()
 		self.toc = time.time()
 		self.main_station()
@@ -81,10 +83,12 @@ class station(object):
 		data["std_intensity"]=float(std_intens)
 		data["state"]=int(state)
 		dataStreamSend = json.dumps(data)
-		r = requests.post(url = API_ENDPOINT, data = dataStreamSend)
-		# extracting response text
-		pastebin_url = r.text
-		print("The pastebin URL is:%s"%pastebin_url)
+		if self.is_connected() == True:
+				r = requests.post(url = API_ENDPOINT, data = dataStreamSend)
+				# extracting response text
+				pastebin_url = r.text
+				print("The pastebin URL is:%s"%pastebin_url)
+
 
 	def callback_LiDAR(self,data):
 		LiDAR_data = data.data
@@ -118,9 +122,22 @@ class station(object):
 		self.last_Intensities_vector = Intensities
 		self.last_std_intensity = std_intensity
 
+	def is_connected(hostname):
+		try:
+			hostname = "198.12.157.136"  #gatria server
+			response = os.system("ping -c 1 " + hostname)
+			# and then check the response...
+			if response == 0:
+				response = True
+			else:
+				response = -1
+			return response
+		except:
+			pass
+			return False
 
 if __name__ == '__main__':
-    os.system('sudo strato beep 100 100 2')
+    # os.system('sudo strato beep 100 100 2')
     h_sonar   = config.getfloat('Station', 'h_sonar')
     key = config.get('Station', 'uuid')
     a   = station('station',h_sonar,key)

@@ -5,7 +5,8 @@ import ConfigParser, math
 import numpy as np
 
 config = ConfigParser.RawConfigParser()
-config.read('/home/pi/channelUI_IoT/init/init.cfg')
+#config.read('/home/pi/channelUI_IoT/init/init.cfg')
+config.read('/home/juand/Documents/GitHub/channelUI_IoT/init/init.cfg')  # Path Pc-Home
 
 
 class station(object):
@@ -51,7 +52,7 @@ class station(object):
 		Intensities_vector = Intensities_vector.replace('\n','')
 		LiDAR_data = '[i,std_i,X,Z,mean_Zp,Intensities]='+str(intensity)+'\t'+str(std_intensity)+'\t'+X+'\t'+Z+'\t'+str(mean_Z)+"\t"+Intensities_vector
                 pub.publish(LiDAR_data)
-#               rospy.loginfo(rospy.get_caller_id() + 'I heard %s', str(h))
+        #rospy.loginfo('HolaMundo')
 
 if __name__ == '__main__':
     hokuyo   = station('Station')
