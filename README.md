@@ -32,6 +32,16 @@ Usage: strato beep on|off|length_millis|length_millis pause_millis repeats
        strato shutdown
        strato battery
 ```
+## Install-Lib Python.
+
+`sudo apt-get install python-requests`
+
+`sudo apt-get install python-scipy`
+
+`sudo apt-get install python-serial`
+
+`sudo apt-get install python-psutil`
+
 ### Installing the Real Time Clock software [Strato pi]
  `sudo raspi-config`
  `sudo apt-get update`
