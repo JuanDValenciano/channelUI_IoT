@@ -131,6 +131,13 @@ iface wlan1 inet dhcp
 
 ### Init upstart RosCore and Nodes
 
+On your Pi, edit the file /etc/rc.local using the editor of your choice. You must edit with root, for example:
+
+```
+sudo nano /etc/rc.local
+```
+Add commands below the comment, but leave the line exit 0 at the end, then save the file and exit.
+
 Inside the `rc.local` you need to add path of channel.sh:
 
 ```

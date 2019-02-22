@@ -25,10 +25,10 @@ class file(object):
                 self.morning_night = 0
             else:
                 self.morning_night = 1
-                self.name = name
+            self.name = name
             self.Ts_rec = Ts_rec
             self.fileText = ''
-            #self.createFile()
+            self.createFile()
             self.tic = time.time()
             self.toc = time.time()
             self.last_h_dist = -1
@@ -101,14 +101,14 @@ class file(object):
                 print ("morning_night = 0")
                 #os.system('sudo rm ' +str(self.fileText))
                 #print "'sudo rm ' +str(self.fileText)")
-                #self.createFile()
+                self.createFile()
             elif H == 6 and self.morning_night == 0 and self.is_connected() == True:
                 self.morning_night = 1
                 #self.send_dataFile()
                 print ("morning_night = 1")
                 #os.system('sudo rm '+str(self.fileText))
                 #print "'sudo rm '+str(self.fileText)")
-                #self.createFile()
+                self.createFile()
 
         def recording(self):
             print ("Subscriber 1 ")
@@ -125,7 +125,6 @@ class file(object):
 
         def saveData(self):
             print ("SaveData")
-            '''
             f = open(self.fileText,"a") #open text file
             Times=time.strftime("%y")+'\t'+time.strftime("%m")+'\t'+time.strftime("%d")+'\t'+time.strftime("%H")+'\t'+time.strftime("%M")+'\t'+time.strftime("%S")+'\t'
             if self.is_connected() == True:
@@ -137,17 +136,20 @@ class file(object):
             d3 = self.last_LiDAR_std_intensity
             d4 = self.last_monitor
             dataSens = str(self.last_h_dist) +'\t' +str(self.last_LiDAR_intensity)+'\t'+str(self.last_LiDAR_std_intensity)+'\t'+ str(self.last_mean_Zp)+'\t'
-            dataSystem =  str(self.last_monitor) +str(internet)+'\r\n'
-            dataLine = Times + dataSens + dataSystem
-            f.write(dataLine)
-            f.close()
-            '''
-            d1 = self.last_h_dist
-            d2 = self.last_LiDAR_intensity
-            d3 = self.last_LiDAR_std_intensity
-            d4 = self.last_monitor
+            dataSystem =  str(self.last_monitor) +'\t'+ str(internet)+'\r\n'
+            #Get Temp GPU-CPU
             cpu = psutil.cpu_percent()
             temp = int(open('/sys/class/thermal/thermal_zone0/temp').read()) / 1e3 # Get Raspberry Pi CPU temp
+
+            temp_cpu = str(cpu) +'\t'+ str(temp)+'\t'
+
+            dataLine = Times + temp_cpu + dataSens + dataSystem
+
+            f.write(dataLine)
+            f.close()
+
+            cpu = psutil.cpu_percent()
+
             if self.is_connected() == True:
                 self.ThingSpeak(KEY,d1,d2,d3,d4, cpu, temp)
 
@@ -210,7 +212,7 @@ class file(object):
 
         def is_connected(hostname):
             try:
-                hostname = "198.12.157.136"
+                hostname = REMOTE_SERVER
                 response = os.system("ping -c 1 " + hostname)
                 # and then check the response...
                 if response == 0:
