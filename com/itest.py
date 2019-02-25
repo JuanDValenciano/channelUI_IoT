@@ -18,7 +18,7 @@ class internet_test(object):
              if answ == True:
                 print("Conection internet OK")
              else:
-		       print("NO INTERNET")
+	     	print("NO INTERNET")
              pub.publish(str(answ))
              rate.sleep()
 

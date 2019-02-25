@@ -5,6 +5,7 @@ from std_msgs.msg import String
 class station(object):
         def __init__(self, name):
                 rospy.init_node('monitor', anonymous=True)
+		rospy.Subscriber('h_dist', String, self.callback_sonar)
 		self.tic_sonar = time.time()
 		self.toc_sonar = time.time()
 		self.main_monitor()
@@ -12,7 +13,7 @@ class station(object):
         def main_monitor(self):
 		rate = rospy.Rate(1) # 1hz
         	while not rospy.is_shutdown():
-                	rospy.Subscriber('h_dist', String, self.callback_sonar)
+                	#rospy.Subscriber('h_dist', String, self.callback_sonar)
                 	self.toc_sonar = time.time()
                 	delta_time = self.toc_sonar - self.tic_sonar
                 	if delta_time > 30:

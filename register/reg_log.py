@@ -11,7 +11,7 @@ import urllib, httplib, socket
 
 REMOTE_SERVER = "www.google.com"
 #path = str('/home/pi/channelUI_IoT/register/data/')
-path = str('/home/juand/Documents/GitHub/channelUI_IoT/register/data/')  # Path Pc-Home
+path = str('/home/pi/channelUI_IoT/register/data/')  # Path Pc-Home
 #path = str('/home/juanval/Documents/GitHub/channelUI_IoT/register/data/')  # Path Pc-Work
 #KEY  = 'LCH8BP0CR3SHKGNU' # Key harold
 KEY  = 'ZOI216MQ3KMVJW52'  # Key JuanD

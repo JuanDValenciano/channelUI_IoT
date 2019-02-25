@@ -7,7 +7,7 @@ import requests
 
 config = ConfigParser.RawConfigParser()
 #config.read('/home/pi/channelUI_IoT/init/init.cfg')
-config.read('/home/juand/Documents/GitHub/channelUI_IoT/init/init.cfg')  # Path Pc-Home
+config.read('/home/pi/channelUI_IoT/init/init.cfg')  # Path Pc-Home
 REMOTE_SERVER = "www.google.com"
 #API_ENDPOINT = "http://hidrometrico.herokuapp.com/register"
 #API_ENDPOINT = "http://smh.unibague.edu.co/register"
