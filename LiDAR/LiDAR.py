@@ -5,8 +5,8 @@ import ConfigParser, math
 import numpy as np
 
 config = ConfigParser.RawConfigParser()
-#config.read('/home/pi/channelUI_IoT/init/init.cfg')
-config.read('/home/juanval/GitHub/channelUI_IoT/init/init.cfg')  # Path Pc-Home
+config.read('/home/pi/channelUI_IoT/init/init.cfg')
+#config.read('/home/juanval/GitHub/channelUI_IoT/init/init.cfg')  # Path Pc-Home
 
 class station(object):
         def __init__(self, name):

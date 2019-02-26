@@ -11,12 +11,13 @@ import urllib, httplib, socket
 import subprocess
 
 REMOTE_SERVER = "www.google.com"
-#path = str('/home/pi/channelUI_IoT/register/data/')
+path = str('/home/pi/channelUI_IoT/register/data/')
+pathEmail = str('/home/pi/channelUI_IoT/com/')  # Path Pc-Work
 #path = str('/home/pi/channelUI_IoT/register/data/')  # Path Pc-Home
-path = str('/home/juanval/GitHub/channelUI_IoT/register/data/')  # Path Pc-Work
-pathEmail = str('/home/juanval/GitHub/channelUI_IoT/com/')  # Path Pc-Work
-#KEY  = 'LCH8BP0CR3SHKGNU' # Key harold
-KEY  = 'ZOI216MQ3KMVJW52'  # Key JuanD
+#path = str('/home/juanval/GitHub/channelUI_IoT/register/data/')  # Path Pc-Work
+#pathEmail = str('/home/juanval/GitHub/channelUI_IoT/com/')  # Path Pc-Work
+KEY  = 'LCH8BP0CR3SHKGNU' # Key harold
+#KEY  = 'ZOI216MQ3KMVJW52'  # Key JuanD
 
 class file(object):
         def __init__(self, name, Ts_rec, Ts_update):
@@ -44,8 +45,8 @@ class file(object):
             msg = MIMEMultipart()
             body = "Data from canal UI \n"
             password = "canalUI1234"
-            msg['From'] = "canalunibague@gmail.com"
-            #msg['To'] = "harold.murcia@unibague.edu.co"
+            #msg['From'] = "canalunibague@gmail.com"
+            msg['To'] = "harold.murcia@unibague.edu.co"
             msg['To'] = "jvalenciano@unal.edu.co"
             msg['Subject'] = "Data report"
     		# attach file to message body
@@ -241,6 +242,6 @@ class file(object):
                 return False
 
 if __name__ == '__main__':
-    Ts_rec = 20   # recording sample time in secs 60*10
-    Ts_update = 5   # recording sample time in secs 60*10
+    Ts_rec = 60*30   # recording sample time in secs 60*10
+    Ts_update = 30   # recording sample time in secs 60*10
     Data = file('data_file',Ts_rec, Ts_update)

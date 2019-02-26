@@ -8,12 +8,12 @@ import subprocess
 #import pandas as pd
 
 config = ConfigParser.RawConfigParser()
-#config.read('/home/pi/channelUI_IoT/init/init.cfg')
-config.read('/home/juanval/GitHub/channelUI_IoT/init/init.cfg')  # Path Pc-Home
+config.read('/home/pi/channelUI_IoT/init/init.cfg')
+#config.read('/home/juanval/GitHub/channelUI_IoT/init/init.cfg')  # Path Pc-Home
 REMOTE_SERVER = "www.google.com"
 #API_ENDPOINT = "http://hidrometrico.herokuapp.com/register"
-#API_ENDPOINT = "http://smh.unibague.edu.co/register"
-API_ENDPOINT = "http://httpbin.org/post"
+API_ENDPOINT = "http://smh.unibague.edu.co/register"
+#API_ENDPOINT = "http://httpbin.org/post"
 
 Data  = '{ "uuid":"21456-54654-1321321", "fecha": "10/27/2018 17:11:04", "water_distance": 1500, "wet_area" : 4512, "X": [ 	2,3,456,456,456 ], "Z":[ 4,5,45,45,90 ], "z_m":0.0, "Intensities":[1,2,3,4],	"Intensity": 4.14231, "std_intensity": 0.015, "state": 1 }'
 
