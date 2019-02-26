@@ -18,6 +18,6 @@ python /home/pi/channelUI_IoT/com/itest.py &                                    
 #*******************************************************************************
 python /home/pi/channelUI_IoT/LiDAR/LiDAR.py &                                  # take Data HoKuyo Sensor
 python /home/pi/channelUI_IoT/register/reg_log.py &                             #
-#python /home/pi/channelUI_IoT/com/control.py &                                  #
+python /home/pi/channelUI_IoT/com/control.py &                                  #
 
 #sudo strato watchdog heartbeat &

@@ -4,14 +4,16 @@ import ConfigParser, os, time
 import numpy as np
 import json
 import requests
+import subprocess
+#import pandas as pd
 
 config = ConfigParser.RawConfigParser()
 #config.read('/home/pi/channelUI_IoT/init/init.cfg')
-config.read('/home/pi/channelUI_IoT/init/init.cfg')  # Path Pc-Home
+config.read('/home/juanval/GitHub/channelUI_IoT/init/init.cfg')  # Path Pc-Home
 REMOTE_SERVER = "www.google.com"
 #API_ENDPOINT = "http://hidrometrico.herokuapp.com/register"
-API_ENDPOINT = "http://smh.unibague.edu.co/register"
-#API_ENDPOINT = "http://httpbin.org/post"
+#API_ENDPOINT = "http://smh.unibague.edu.co/register"
+API_ENDPOINT = "http://httpbin.org/post"
 
 Data  = '{ "uuid":"21456-54654-1321321", "fecha": "10/27/2018 17:11:04", "water_distance": 1500, "wet_area" : 4512, "X": [ 	2,3,456,456,456 ], "Z":[ 4,5,45,45,90 ], "z_m":0.0, "Intensities":[1,2,3,4],	"Intensity": 4.14231, "std_intensity": 0.015, "state": 1 }'
 
@@ -30,10 +32,11 @@ class station(object):
                 self.last_intensity = -1
 		self.last_state = -1
                 self.last_std_intensity = -1
-		#self.Ts_rec = 60*5
-		self.Ts_rec = 20
+		self.Ts_rec = 60*5
+		#self.Ts_rec = 5
 		self.tic = time.time()
 		self.toc = time.time()
+		self.dataFails = []
 		self.main_station()
 
 	def main_station(self):
@@ -55,10 +58,11 @@ class station(object):
 	def callback_state(self,data):
 		self.last_state = data.data
 		self.toc = time.time()
-                delta_t  = self.toc - self.tic
-                if delta_t >= self.Ts_rec:
-                        self.sendData()
-                        self.tic = time.time()
+		delta_t  = self.toc - self.tic
+		if delta_t >= self.Ts_rec:
+			self.sendData()
+			self.tic = time.time()
+			rospy.sleep(1)
 
 	def sendData(self):
 		Times= time.strftime("%m")+"/"+time.strftime("%d")+"/"+time.strftime("%Y")+' '+time.strftime("%H")+':'+time.strftime("%M")+':'+time.strftime("%S")
@@ -72,25 +76,58 @@ class station(object):
 		intens = self.last_intensity
 		std_intens = self.last_std_intensity
 		state = self.last_state
+
+		# Data back
 		data  = json.loads(Data)
 		data["uuid"]=key
 		data["fecha"]=Times
 		data["water_distance"]=float(w_dist)
 		data["wet_area"]=float(wetArea)
-		data["X"]=X
 		data["Z"]=Z
+		data["X"]=X
 		data["Intensities"]=Intensities_vector
 		data["z_m"]=z_m
 		data["Intensity"]=float(intens)
 		data["std_intensity"]=float(std_intens)
 		data["state"]=int(state)
-		dataStreamSend = json.dumps(data)
-		if self.is_connected() == True:
-				r = requests.post(url = API_ENDPOINT, data = dataStreamSend)
-				# extracting response text
-				pastebin_url = r.text
-				print("The pastebin URL is:%s"%pastebin_url)
 
+
+		if self.is_connected() == True and np.size(self.dataFails) == 0:
+			rospy.loginfo("Conection NOT DataFails")
+			#print("**************")
+			#print(data)
+			#print("**************")
+			dataStreamSend = json.dumps(data)
+			#r = requests.post(url = API_ENDPOINT, data = dataStreamSend)
+			requests.post(url = API_ENDPOINT, data = dataStreamSend)
+			# extracting response text
+			#pastebin_url = r.text
+			#print("The pastebin URL is:%s"%pastebin_url)
+			#rospy.loginfo("The pastebin URL is:%s"%pastebin_url)
+		elif self.is_connected() == True and np.size(self.dataFails) != 0:
+			rospy.loginfo("Conection and DataFails")
+			self.dataFails.append(data)
+			numInternet = np.size(self.dataFails)
+			rospy.loginfo("Conection and DataFails")
+			for i in range(1,np.size(self.dataFails)+1):
+				#print("[")
+				#print(numInternet-i)
+				#print("]: ")
+				if self.is_connected() == True:
+					dataStreamSend = json.dumps(self.dataFails[numInternet-i])
+					requests.post(url = API_ENDPOINT, data = dataStreamSend)
+					#pastebin_url = r.text
+					#rospy.loginfo("The pastebin URL is:%s"%pastebin_url)
+					self.dataFails.pop(numInternet-i);
+					rospy.sleep(1)
+				else:
+					break
+		else:
+			rospy.loginfo("No Conection......")
+			self.dataFails.append(data)
+			numInternet = np.size(self.dataFails)
+			#rospy.loginfo("Num: ")
+			#rospy.loginfo(numInternet)
 
 	def callback_LiDAR(self,data):
 		LiDAR_data = data.data
