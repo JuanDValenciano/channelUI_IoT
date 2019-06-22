@@ -70,7 +70,7 @@ class station(object):
 		w_dist = self.last_WaterDistance
 		wetArea = self.last_wetArea
 		X = self.last_X
-		Z = self.last_X
+		Z = self.last_Z
 		Intensities_vector = self.last_Intensities_vector
 		z_m= self.last_mean_Zp
 		intens = self.last_intensity
